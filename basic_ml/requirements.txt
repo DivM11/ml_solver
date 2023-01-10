@@ -1,0 +1,4 @@
+pandas
+hyperopt
+scikit-learn
+tensorflow
