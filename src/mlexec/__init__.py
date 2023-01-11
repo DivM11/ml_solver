@@ -4,3 +4,5 @@ from .preprocessing.embedding import DFEmbedder
 from .tuning.modeling import ModelExecutor
 from .evaluation.evaluate import ModelEvaluator
 from .execution import MLExecutor
+
+from .version import __version__
