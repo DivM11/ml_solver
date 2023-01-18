@@ -6,6 +6,9 @@ build-backend = "setuptools.build_meta"
 testpaths = [
     "tests",
 ]
+pythonpath = [
+  "."
+]
 
 [tool.mypy]
 mypy_path = "src"
