@@ -41,8 +41,8 @@ class DFPreprocessor(DFImputer):
         """
         normalizer = StandardScaler()
         normalizer.fit(train)
-        args = map(normalizer.transform, args)
-        return train, *args
+        normalized_args = map(normalizer.transform, args)
+        return train, *normalized_args
 
     def prepare_data(self, normalize=False):
         x_train, x_test, y_train, y_test = self.split_data()

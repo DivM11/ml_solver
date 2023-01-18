@@ -1,4 +1,5 @@
 import warnings
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -16,21 +17,21 @@ warnings.filterwarnings('ignore')
 class ModelExecutor:
     def __init__(self, 
                 model_class,
-                x_train,
-                y_train,
-                param_grid: dict={},
-                metric=None,
-                normalize=True,
-                model_type="sklearn",
-                task="classification",
-                class_weights={0:1,1:1},
-                tune_flag=True,
-                cv="basic",
-                n_fold=5,
-                internal_val=False,
+                x_train: pd.DataFrame,
+                y_train: pd.Series,
+                param_grid: dict[str, Any]={},
+                metric:str="",
+                normalize:bool=True,
+                model_type:str="sklearn",
+                task:str="classification",
+                class_weights:dict[int, int]={0:1,1:1},
+                tune_flag:bool=True,
+                cv:str="basic",
+                n_fold:int=5,
+                internal_val:bool=False,
                 x_val=None,
                 y_val=None,
-                fit_params:dict={},
+                fit_params:dict[str, Any]={},
                 final_train_flag:bool=True) -> None:
         """
         ### MODEL OPTIONS
@@ -41,8 +42,7 @@ class ModelExecutor:
         self_val indicates if the model can run validation internally and perform early stopping.
         (For instance xgboost or LightGBM)
         """
-        self.model = None
-        self.best_params = {}
+        self.best_params: dict[str, Any] = {}
         self.x_train = x_train
         self.y_train = y_train
         self._task = task
@@ -83,7 +83,7 @@ class ModelExecutor:
         self.fit_params = fit_params
         self.final_train_flag = final_train_flag
 
-    def adapt_grid(self, param_grid: dict):
+    def adapt_grid(self, param_grid: dict[str, Any]):
         """
         Adapt the paramter grid to fit the needs of bayesian optimizer
         """
@@ -204,10 +204,10 @@ class ModelExecutor:
         if self.model:
             return str(self.model[-1].__class__).split('.')[-1].split("'")[0]
         else:
-            return self.__class__
+            return str(self.__class__)
     
     @staticmethod
-    def convert_metrics_to_scorers(metrics: dict):
+    def convert_metrics_to_scorers(metrics: dict[str, Any]):
             scorers = {}
             for k,v in metrics.items():
                 scorers[k] = skmetrics.make_scorer(v)

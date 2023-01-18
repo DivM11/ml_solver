@@ -20,8 +20,8 @@ class DFEmbedder:
 
     @staticmethod
     def gen_multi_col_embeddings(train: pd.DataFrame,
-                        encode_cols: list,
-                        test: pd.DataFrame = None,
+                        encode_cols: list[str],
+                        test: pd.DataFrame = pd.DataFrame(),
                         root: str = "model",
                         max_output_size: int=10,
                         fraction_threshold: float=0.5):
@@ -49,7 +49,7 @@ class DFEmbedder:
                         x_train)
             model.save(pathlib.Path(root, "embeddings"))
 
-            if not test is None:
+            if test != pd.DataFrame():
                 x_test = DFEmbedder.adapt_df(test, encode_cols)
                 test = DFEmbedder.add_embedding_output(model, 
                                 test,
@@ -59,10 +59,10 @@ class DFEmbedder:
 
     @staticmethod
     def gen_supervised_embeddings(train: pd.DataFrame,
-                        encode_cols: list,
+                        encode_cols: list[str],
                         y_train: pd.Series,
                         test: pd.DataFrame = None,
-                        embedding_output_dim: int = None,
+                        embedding_output_dim: int = 10,
                         root: str = "model",
                         max_output_size: int=10,
                         fraction_threshold: float=0.1,
@@ -117,7 +117,7 @@ class DFEmbedder:
         return train, test
     
     @staticmethod
-    def adapt_df(df: pd.DataFrame, col_list:list=None):
+    def adapt_df(df: pd.DataFrame, col_list:list[str]=[]):
         """
         Adapt the dataframe to fit to the TF specified format
         """
@@ -140,7 +140,7 @@ class DFEmbedder:
         return data
 
     @staticmethod
-    def gen_columnwise_embeddings(data: pd.DataFrame, encode_cols: list, root):
+    def gen_columnwise_embeddings(data: pd.DataFrame, encode_cols: list[str], root):
         """Fits, adds and saves embeddings for the categorical variables.
 
         Args:
@@ -168,7 +168,7 @@ class DFEmbedder:
         return data
 
     @staticmethod
-    def save_embeddings(embeddings: dict, root):
+    def save_embeddings(embeddings: dict[str, keras.Model], root):
         """Saving embeddings for each columns
 
         Args:

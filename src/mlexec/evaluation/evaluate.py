@@ -1,8 +1,9 @@
+from typing import Any
+
 import sklearn.metrics as skmetrics
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from ..tuning.modeling import ModelExecutor
 
 class ModelEvaluator:
     """
@@ -12,11 +13,11 @@ class ModelEvaluator:
     def __init__(self,
                 x_test,
                 y_test,
-                model_dict:dict=None,
-                metric_list=[],
-                class_weights={0:1, 1:1},
-                task="classification",
-                optimization_criterion="f1_score"):
+                model_dict:dict[str, Any]={},
+                metric_list:list[str]=[],
+                class_weights:dict[int,int]={0:1, 1:1},
+                task:str="classification",
+                optimization_criterion:str="f1_score"):
         if not hasattr(self, "model_dict"):
             self.model_dict = model_dict
             # Weights should have negative class key first
@@ -46,7 +47,7 @@ class ModelEvaluator:
                 "auc_pr": ModelEvaluator.get_aucpr,
             }
         self.metric_collection_list = metric_list if metric_list else list(self.metric_collection_func_map.keys())
-        self.results = {}
+        self.results:dict[str, dict[str, float]] = {}
         self.predictions = None
 
     @staticmethod
@@ -76,7 +77,7 @@ class ModelEvaluator:
         """
         Only used for validation results
         """
-        val_scores = {}
+        val_scores:dict[str, dict[str, float]] = {}
         for model_name, model_artifacts in self.model_dict.items():
             val_scores[model_name] = {}
             for k,v in model_artifacts["val_results"].items():

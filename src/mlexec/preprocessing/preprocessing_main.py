@@ -43,7 +43,7 @@ class Preprocessor:
         else:
             return list(set(self.df.columns)-set(self.categorical_cols))
 
-    def _find_categorical_cols(self, categorical_cols:list, threshold:float):
+    def _find_categorical_cols(self, categorical_cols:list[str], threshold:float):
         if categorical_cols:
             return categorical_cols
         else:
