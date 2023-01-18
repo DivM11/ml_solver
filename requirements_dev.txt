@@ -1,4 +1,5 @@
 pandas
+matplotlib
 hyperopt
 scikit-learn
 tensorflow
