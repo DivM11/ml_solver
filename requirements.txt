@@ -1,5 +1,7 @@
 pandas
 hyperopt
 scikit-learn
+lightgbm
+xgboost
 tensorflow
 matplotlib
