@@ -1,0 +1,8 @@
+pandas
+hyperopt
+scikit-learn
+tensorflow
+tox
+pytest
+pytest-cov
+mypy
