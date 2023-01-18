@@ -33,7 +33,8 @@ class ModelEvaluator:
             self.metric_collection_func_map = {
                 "rmse": lambda y_test,y_pred: skmetrics.mean_squared_error(y_test,y_pred)**0.5,
                 "r2": skmetrics.r2_score,
-                "mae": skmetrics.mean_absolute_error
+                "mae": skmetrics.mean_absolute_error,
+                "mape": skmetrics.mean_absolute_percentage_error
                 }
         elif self.task=="classification":
             self.metric_collection_func_map = {
