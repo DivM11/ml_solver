@@ -80,8 +80,8 @@ class DFImputer(Preprocessor):
         categorical_cols = high_cardinality_cols+low_cardinality_cols
         super().__init__(df,
                         target_col,
-                        categorical_cols, 
-                        continuous_cols, 
+                        categorical_cols,
+                        continuous_cols,
                         exclude_cols,
                         categorical_threshold)
         
@@ -91,7 +91,7 @@ class DFImputer(Preprocessor):
         self._impute_categorical_cols()
         self._impute_continuous_cols(continuous_impute_method)
 
-    def _classify_categorical_cols(self, 
+    def _classify_categorical_cols(self,
                     high_cardinality_cols,
                     low_cardinality_cols,
                     cardinality_threshold):
@@ -114,16 +114,18 @@ class DFImputer(Preprocessor):
         for col in self.low_cardinality_cols:
             col_mode = self.df[col].mode().values[0]
             self.df[col].fillna(col_mode, inplace=True)
-        
-        self.df[self.high_cardinality_cols].fillna('MISSING',
-                            inplace=True)
+        self.df[self.high_cardinality_cols].fillna(
+            'MISSING', inplace=True)
     
     def _impute_continuous_cols(self, method):
-        if method in ["mean", "bfill", "ffill"]:
-            self.df[self.continuous_cols].fillna(method)
+        if method in ["bfill", "ffill"]:
+            self.df[self.continuous_cols].fillna(method, inplace=True)
         elif isinstance(method, str):
             if method=="median":
                 col_medians = self.df[self.continuous_cols].median()
                 self.df[self.continuous_cols] = self.df[self.continuous_cols].fillna(col_medians)
+            if method=="mean":
+                col_means = self.df[self.continuous_cols].mean()
+                self.df[self.continuous_cols] = self.df[self.continuous_cols].fillna(col_means)
             else:
                 self.df[self.continuous_cols] = self.df[self.continuous_cols].interpolate(method)
