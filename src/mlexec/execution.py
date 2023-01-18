@@ -10,7 +10,7 @@ class MLExecutor(DFPreprocessor, ModelAssembler, ModelEvaluator):
     """
     Master Executor class to perform end to end ML
     """
-    def __init__(self, 
+    def __init__(self,
                 df:pd.DataFrame,
                 target_col: str,
                 task:str="classification",
@@ -48,7 +48,7 @@ class MLExecutor(DFPreprocessor, ModelAssembler, ModelEvaluator):
                                 cardinality_threshold=cardinality_threshold,
                                 continuous_impute_method=continuous_impute_method)
         x_train, x_test, y_train, y_test = self.prepare_data()
-        
+
         # performing tuning and model training
         ModelAssembler.__init__(self,
                                 x_train=x_train,
@@ -65,10 +65,10 @@ class MLExecutor(DFPreprocessor, ModelAssembler, ModelEvaluator):
                                 final_train_flag=final_train_flag)
         self.run_tuning(max_evals=max_evals)
 
-        ModelEvaluator.__init__(self, 
+        ModelEvaluator.__init__(self,
                         x_test=x_test,
                         y_test=y_test,
                         optimization_criterion="f1_score")
-        
-        self.val_results = self.get_val_scores()
+
+        self.get_val_scores()
         self.test_results = self.evaluate(find_best_threshold=False)
