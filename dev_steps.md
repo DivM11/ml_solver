@@ -25,7 +25,7 @@ py -m twine upload --repository pypi dist/*
 ```
 ## Updating release tag to the latest commit
 ```sh
-git tag -f v0.0.1
+git tag -f v0.0.2
 git push
-git push origin -f v0.0.1
+git push origin -f v0.0.2
 ```
