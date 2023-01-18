@@ -25,37 +25,37 @@ class DFEmbedder:
                         root: str = "model",
                         max_output_size: int=10,
                         fraction_threshold: float=0.5):
-            emb_c = {col: val.nunique() for col, val in train[encode_cols].items()}
-            emb_sizes = {col: min(max_output_size, round(c*fraction_threshold)) 
-                        for col, c in emb_c.items()}
-            embeddings = []
-            input_layers = {}
-            x_train = DFEmbedder.adapt_df(train, encode_cols)
-            for col in encode_cols:
-                input_layer = Input(shape=(1,), name=col)
-                input_layers[col] = input_layer
-                vocab_size = emb_c[col] + 1
-                embeddings.append(Flatten()(
-                    Embedding(vocab_size, 
-                            emb_sizes[col])(input_layer)
-                    ))
-            output = concatenate(embeddings)
-            model = Model(input_layers, output)
-            loss_fn = keras.losses.SparseCategoricalCrossentropy()
-            model.compile("rmsprop", loss=loss_fn)
-            
-            train = DFEmbedder.add_embedding_output(model, 
-                        train,
-                        x_train)
-            model.save(pathlib.Path(root, "embeddings"))
+        emb_c = {col: val.nunique() for col, val in train[encode_cols].items()}
+        emb_sizes = {col: min(max_output_size, round(c*fraction_threshold)) 
+                    for col, c in emb_c.items()}
+        embeddings = []
+        input_layers = {}
+        x_train = DFEmbedder.adapt_df(train, encode_cols)
+        for col in encode_cols:
+            input_layer = Input(shape=(1,), name=col)
+            input_layers[col] = input_layer
+            vocab_size = emb_c[col] + 1
+            embeddings.append(Flatten()(
+                Embedding(vocab_size,
+                        emb_sizes[col])(input_layer)
+                ))
+        output = concatenate(embeddings)
+        model = Model(input_layers, output)
+        loss_fn = keras.losses.SparseCategoricalCrossentropy()
+        model.compile("rmsprop", loss=loss_fn)
+        
+        train = DFEmbedder.add_embedding_output(model, 
+                    train,
+                    x_train)
+        model.save(pathlib.Path(root, "embeddings"))
 
-            if test != pd.DataFrame():
-                x_test = DFEmbedder.adapt_df(test, encode_cols)
-                test = DFEmbedder.add_embedding_output(model, 
-                                test,
-                                x_test)
-                return train, test
-            return train
+        if test is not pd.DataFrame():
+            x_test = DFEmbedder.adapt_df(test, encode_cols)
+            test = DFEmbedder.add_embedding_output(model, 
+                            test,
+                            x_test)
+            return train, test
+        return train
 
     @staticmethod
     def gen_supervised_embeddings(train: pd.DataFrame,
@@ -87,7 +87,7 @@ class DFEmbedder:
             input_layers[col] = input_layer
             vocab_size = emb_c[col] + 1
             embeddings.append(Flatten()(
-                Embedding(vocab_size, 
+                Embedding(vocab_size,
                         emb_sizes[col])(input_layer)
                 ))
         x = concatenate(embeddings)
