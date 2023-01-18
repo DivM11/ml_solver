@@ -1,8 +1,10 @@
-import numpy as np
-import pandas as pd
 import random
 
-from src.mlexec import MLExecutor
+import numpy as np
+import pandas as pd
+# import pytest
+
+from mlexec import MLExecutor
 
 NUM_ROWS = 4000
 NUM_CONTINUOUS_COLS = 5
