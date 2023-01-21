@@ -105,7 +105,10 @@ class ModelAssembler:
             "lambda": (0.25,1,0.25),
             "alpha": (0.25,1,0.25),
             "random_state": 42,
-            "eval_metric": "auc"}
+            "eval_metric": "auc"},
+        "knn": {
+            "n_neighbors": (5,50,5),
+            "weights": ["uniform","distance"]}
             }
         model_configs = {}
         for model_name in self.model_list:
