@@ -89,7 +89,10 @@ class ModelEvaluator:
     def get_best_model(self):
         self.get_val_scores()
         primary_metric = self.metric_collection_list[0]
-        self.best_model_name = self.val_results[primary_metric].idxmax()
+        if primary_metric in ["rmse","mae","mape","misclassification_cost"]:
+            self.best_model_name = self.val_results[primary_metric].idxmin()
+        else:
+            self.best_model_name = self.val_results[primary_metric].idxmax()
         self.best_model = self.model_dict[self.best_model_name]["model"]
     
     def evaluate(self, x_test=None, y_test=None, find_best_threshold=False):
