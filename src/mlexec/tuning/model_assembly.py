@@ -15,14 +15,14 @@ class ModelAssembler:
     """
     Generates the list of model classes (based on user choice or defaults)
     """
-    def __init__(self, 
-                task, 
+    def __init__(self,
+                task,
                 x_train,
                 y_train,
                 model_list:list[str]=["lgb","rf","xgb"],
                 metric:str="",
                 normalize:bool=True,
-                class_weights={0:1,1:1},
+                class_weights:dict={0:1,1:1},
                 tune_flag:bool=True,
                 cv:str="basic",
                 n_fold:int=5,
@@ -35,12 +35,17 @@ class ModelAssembler:
         self.normalize = normalize
         self.metric = metric
         self.task = task
+        # handling cases where the class weights are not correct
+        if y_train.nunique() >= len(class_weights.keys()):
+            class_weights = {cat: 1 for cat in y_train.unique()}
         self.class_weights = class_weights
         self.tune_flag = tune_flag
         self.cv = cv
         self.n_fold = n_fold
         self.internal_val = internal_val
         self.final_train_flag = final_train_flag
+        # initiating model dictionary
+        self.model_dict = {}
         
     def get_model_config(self):
         MODEL_CLASSES = {
@@ -110,6 +115,7 @@ class ModelAssembler:
             "n_neighbors": (5,50,5),
             "weights": ["uniform","distance"]}
             }
+
         model_configs = {}
         for model_name in self.model_list:
             model_configs[model_name] = {"model_class": MODEL_CLASSES[self.task][model_name],
@@ -124,7 +130,6 @@ class ModelAssembler:
     def run_tuning(self, max_evals):
         # get model configs (model classes and parameter search grid)
         model_configs = self.get_model_config()
-        self.model_dict = {}
         # performing tuning and model training
         for model_name, model_config in model_configs.items():
             # Tuning and finding the best configured model

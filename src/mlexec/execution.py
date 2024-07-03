@@ -1,5 +1,6 @@
-import gc
-
+"""
+Main execution script that creates a MLEXecutor master object and runs the various steps.
+"""
 import pandas as pd
 
 from .preprocessing.prep_train_data import DFPreprocessor

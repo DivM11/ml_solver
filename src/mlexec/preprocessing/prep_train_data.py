@@ -46,10 +46,10 @@ class DFPreprocessor(DFImputer):
 
     def prepare_data(self, normalize=False):
         x_train, x_test, y_train, y_test = self.split_data()
-        
+
         if normalize:
             x_train, x_test = DFPreprocessor.normalize_cols(x_train, x_test)
-        
+
         if self.high_cardinality_cols:
             x_train, x_test = DFEmbedder.gen_multi_col_embeddings(
                                                 train=x_train,

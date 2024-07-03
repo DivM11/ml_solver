@@ -108,7 +108,7 @@ class ModelExecutor:
                     self.param_grid[modified_key] = scope.int(hp.quniform(modified_key, *v))
                 else:
                     self.param_grid[modified_key] = hp.quniform(modified_key, *v)
-            elif isinstance(v[0], int):   
+            elif isinstance(v[0], int):
                 self.param_grid[modified_key] = hp.randint(modified_key, *v)
             elif isinstance(v[0], float):
                 self.param_grid[modified_key] = hp.uniform(modified_key, *v)
